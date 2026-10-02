@@ -7,6 +7,23 @@ usada porque o capstone fica no ar por dias e o AWS Academy não segura isso.
 > **Este roteiro não foi testado de ponta a ponta.** O fluxo (App Service F1 + publish profile +
 > `azure/webapps-deploy`) segue a documentação oficial; confira cada passo na primeira execução.
 
+## Antes de tudo: você precisa de uma assinatura Azure
+
+Criar um Web App exige uma **assinatura** (*subscription*), e **entrar com o e-mail da FIAP não basta**:
+testamos com uma conta de professor da FIAP (`@fiap.com.br`) e ela existe no diretório da FIAP, mas **não
+tem nenhuma assinatura** (`az account list` mostra só "tenant level account"). Portanto:
+
+1. **Ative o Azure for Students antes da Aula 6**, em https://azure.microsoft.com/free/students, com o
+   e-mail da FIAP. Dá crédito sem cartão. Faça isso com antecedência: a verificação de estudante pode
+   demorar ou falhar.
+2. Confira: `az login` e depois `az account list -o table` — tem de aparecer uma assinatura com estado
+   `Enabled`. Se só aparecer "tenant level account", a ativação não concluiu.
+3. Se o `az login` der `AADSTS50020`, você está tentando entrar num diretório onde sua conta não existe:
+   use `az login --tenant <id do diretório da sua conta>` (o erro mostra o id).
+
+> Não confirmamos se todos os alunos conseguem ativar o Azure for Students; o professor precisa checar
+> com a coordenação. Quem não conseguir deve avisar **antes** do dia da entrega.
+
 ## Custo
 
 O plano **F1 (Free)** não cobra, mas tem 60 minutos de CPU por dia e dorme quando ocioso (a
