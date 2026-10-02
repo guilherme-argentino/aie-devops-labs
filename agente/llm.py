@@ -52,6 +52,7 @@ def _openai(prompt: str, temperatura: float, max_tokens: int) -> str:
         messages=[{"role": "user", "content": prompt}],
         temperature=temperatura,
         max_tokens=max_tokens,
+        seed=int(os.environ.get("LLM_SEED", "42")),  # reduz o ruído entre execuções do gate
     )
     return resposta.choices[0].message.content or ""
 

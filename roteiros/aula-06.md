@@ -37,8 +37,9 @@ python agente/agent_gate.py resultado-eval.json
 python agente/agent_gate.py resultado-eval.json --salvar-baseline   # fixa a baseline atual
 ```
 
-Agora piore **só** `fraude_vendedor` (por exemplo, apague "caixa vazia" do roteador) e melhore outra
-categoria. Rode o eval de novo: o gate reprova pela **regressão da categoria**, mesmo com a média igual
+Agora piore **só** `fraude_vendedor` (por exemplo, apague a linha dessa categoria no `roteador.txt`, o que
+derruba os 6 casos dela) e melhore outra categoria. Uma piora pequena (1 ou 2 casos) fica dentro da
+tolerância de ruído de propósito. Rode o eval de novo: o gate reprova pela **regressão da categoria**, mesmo com a média igual
 ou melhor. É a regra 2 do cabeçalho de `agent_gate.py`.
 
 ## 4. No CI e o override

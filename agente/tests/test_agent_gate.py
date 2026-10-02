@@ -13,24 +13,24 @@ def categoria(rot, rec, res):
 
 def test_categoria_piora_mesmo_com_media_melhor():
     """O caso fraude_vendedor do enunciado: a média sobe, mas uma categoria regride."""
-    baseline = {"fraude_vendedor": categoria(1.0, 1.0, 1.0), "entrega": categoria(0.67, 0.67, 0.67)}
-    candidato = {"fraude_vendedor": categoria(0.67, 0.67, 0.67), "entrega": categoria(1.0, 1.0, 1.0)}
+    baseline = {"fraude_vendedor": categoria(1.0, 1.0, 1.0), "entrega": categoria(0.33, 0.33, 0.33)}
+    candidato = {"fraude_vendedor": categoria(0.33, 0.33, 0.33), "entrega": categoria(1.0, 1.0, 1.0)}
 
     assert agent_gate.media(candidato, "roteamento") == agent_gate.media(baseline, "roteamento")
     motivos = agent_gate.avaliar(candidato, baseline, LIMITES)
     assert any("fraude_vendedor/roteamento: regrediu" in m for m in motivos)
 
 
-def test_um_caso_a_menos_e_ruido():
-    """Cair 1 de 6 casos (≈17 p.p.) está dentro da tolerância e acima do piso."""
+def test_dois_casos_a_menos_e_ruido():
+    """Cair 2 de 6 casos (≈33 p.p.) é ruído do LLM: dentro da tolerância e acima do piso."""
     baseline = {"entrega": categoria(0.83, 0.83, 0.83)}
-    candidato = {"entrega": categoria(0.67, 0.67, 0.67)}
+    candidato = {"entrega": categoria(0.5, 0.5, 0.5)}
     assert agent_gate.avaliar(candidato, baseline, LIMITES) == []
 
 
-def test_dois_casos_a_menos_e_regressao():
+def test_tres_casos_a_menos_e_regressao():
     baseline = {"entrega": categoria(0.83, 0.83, 0.83)}
-    candidato = {"entrega": categoria(0.5, 0.5, 0.5)}
+    candidato = {"entrega": categoria(0.33, 0.33, 0.33)}
     motivos = agent_gate.avaliar(candidato, baseline, LIMITES)
     assert any("regrediu" in m for m in motivos)
     assert any("abaixo do piso" in m for m in motivos)
@@ -38,7 +38,7 @@ def test_dois_casos_a_menos_e_regressao():
 
 def test_sem_baseline_so_vale_o_piso():
     assert agent_gate.avaliar({"entrega": categoria(0.83, 0.83, 0.83)}, {}, LIMITES) == []
-    assert agent_gate.avaliar({"entrega": categoria(0.33, 1.0, 1.0)}, {}, LIMITES)
+    assert agent_gate.avaliar({"entrega": categoria(0.17, 1.0, 1.0)}, {}, LIMITES)
 
 
 def test_taxas_por_categoria_agrega_os_casos():
