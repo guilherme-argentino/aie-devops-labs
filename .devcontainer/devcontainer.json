@@ -9,7 +9,7 @@
     "ghcr.io/devcontainers/features/node:1": { "version": "22" }
   },
   "postCreateCommand": "bash .devcontainer/instalar.sh",
-  "hostRequirements": { "cpus": 4, "memory": "8gb" },
+  "hostRequirements": { "cpus": 2, "memory": "8gb" },
   "forwardPorts": [5000, 8443],
   "portsAttributes": {
     "5000": { "label": "MLflow" },

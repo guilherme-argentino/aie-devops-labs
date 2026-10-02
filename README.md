@@ -47,21 +47,25 @@ python classificador/model_gate.py artefatos/metricas.json
 
 ## Status dos testes
 
-**Testado localmente** (pytest: 36 testes; ruff; `actionlint` nos workflows):
+**Testado** (pytest: 36 testes; ruff; `actionlint`) e **executado no GitHub Actions**: o CI do classificador
+(todas as etapas até o *build* da imagem) e o *agent gate* completo, com Ollama no runner — ambos passaram:
 
 - classificador: treino, model gate (aprova a base saudável e reprova o `lote-novo.csv`), imagem do Lambda
   rodando em Docker e canary contra o alias local (promove o saudável, reverte o que erra 20%)
 - GitOps: Kustomize, Argo CD v3.5.3 em kind sincronizando os dois ambientes a partir de um Git, promoção
   por commit (~40 s), *drift* (produção fica `OutOfSync`, staging se cura)
 - MLflow 3.16: registro, promoção por alias, bloqueio do lote ruim, rollback e Prompt Registry
-- agent gate: promptfoo 0.123 + Ollama (`qwen2.5:3b`, ~11 min em CPU): 28/36 casos, passa nos pisos
-  de `limites.yaml`; o provedor `simulado` reprova
+- agent gate: promptfoo 0.123 + Ollama (`qwen2.5:3b`): 28/36 casos, passa nos pisos de `limites.yaml`;
+  o provedor `simulado` reprova. ~11 min numa máquina de 4 núcleos e **13 min no runner do GitHub (2 vCPU)**
+- juiz de fidelidade (extra opcional, `qwen2.5:3b`): testado em 6 casos locais — pegou a contradição real e
+  deu 2 alarmes falsos, por isso só informa por padrão (ainda não rodou no GitHub)
 
 **Nunca executado** — precisa de conta real ou do GitHub:
 
 - os scripts da AWS (`publicar.sh`, `trafego.sh`, `servidor-mlflow-ec2.sh`) e o uso do Bedrock
 - o deploy no Azure Web Apps
-- os **workflows no GitHub Actions** (validados só por `actionlint`; o primeiro push pode revelar ajustes)
+- os workflows `deploy-classificador`, `canary-classificador` (precisam dos secrets da AWS),
+  `deploy-agente-azure` (Azure) e `gitops-pr` (só roda em PR); passaram só no `actionlint`
 - o `.devcontainer` (o JSON é válido; a imagem do Codespaces não foi construída)
 
 Ver o aviso no topo de cada roteiro de setup.

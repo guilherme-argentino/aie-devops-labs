@@ -8,7 +8,9 @@ Usada onde nem o AWS Academy nem o Azure se encaixam: **Aula 3 (GitOps)**, o **a
 1. No GitHub, **Use this template → Create a new repository** (deixe **público**: o Argo CD lê o Git sem credencial).
 2. **Code → Codespaces → Create codespace on main**. A primeira criação leva alguns minutos
    (`.devcontainer/instalar.sh` instala as dependências, o kind e o Ollama).
-3. A conta gratuita dá **120 horas-core por mês** (60 h numa máquina de 2 núcleos). **Pare o
+3. A conta gratuita dá **120 horas-core por mês**: o `.devcontainer` pede **2 núcleos**, ou seja, ~60 h.
+   Se trocar para a máquina de **4 núcleos** (menu do Codespace → *Change machine type*), o eval do
+   agent gate e o cluster rodam mais rápido, mas as horas acabam na metade do tempo. **Pare o
    Codespace** ao terminar (menu do canto inferior esquerdo) — ele não pára sozinho de imediato.
 
 ## Aula 3 — kind + Argo CD
@@ -31,7 +33,7 @@ npx -y promptfoo@0.123.1 eval -c agente/promptfooconfig.yaml -o resultado-eval.j
 python agente/agent_gate.py resultado-eval.json
 ```
 
-Leva **~10 minutos** em CPU de 2–4 núcleos (36 casos × 2 chamadas). Para iterar rápido, use o
+Leva **~13 minutos** em 2 núcleos (36 casos × 2 chamadas; medido no GitHub Actions) e ~11 em 4. Para iterar rápido, use o
 provedor simulado — ele **não** mede o seu prompt, só valida a esteira:
 `LLM_PROVEDOR=simulado npx promptfoo eval ...`.
 

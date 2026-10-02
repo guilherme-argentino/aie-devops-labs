@@ -26,7 +26,7 @@ npx -y promptfoo@0.123.1 eval -c agente/promptfooconfig.yaml -o resultado-eval.j
 python agente/agent_gate.py resultado-eval.json
 ```
 
-~10 min em CPU. O resultado é uma tabela **por categoria** e por camada. Os critérios estão em
+~13 min em 2 núcleos (medido no runner do GitHub). O resultado é uma tabela **por categoria** e por camada. Os critérios estão em
 `agente/limites.yaml`: pisos por camada e tolerância de ruído.
 
 ## 3. A regra que o enunciado pede
@@ -47,7 +47,22 @@ Abra um PR mexendo em `agente/prompts/especialista.txt`. O workflow **Aula 6 · 
 eval no runner (com Ollama) e escreve a tabela no resumo. Para liberar uma exceção, ponha o rótulo
 `override-agent-gate` no PR — a exceção fica registrada no resumo, com o PR e o autor.
 
-## 5. Deploy
+## 5. Extra opcional: o juiz de fidelidade
+
+O gate acima confere se o fato da política foi *citado*; não vê a resposta que o *contradiz*. O extra
+`agente/promptfooconfig-juiz.yaml` põe um LLM-as-judge para isso:
+
+```bash
+npx -y promptfoo@0.123.1 eval -c agente/promptfooconfig-juiz.yaml -o resultado-juiz.json --no-progress-bar
+python agente/juiz_resumo.py resultado-juiz.json
+```
+
+No workflow: *Actions → Aula 6 · Agent gate → Run workflow → com_juiz*. Testado com o juiz padrão
+(`qwen2.5:3b`) em 6 casos: pegou a contradição real (promessa de reembolso onde a política diz que
+não há) e deu 2 alarmes falsos. Por isso ele **só informa** por padrão; para bloquear, use um modelo
+maior (`LLM_JUIZ_BASE_URL`, `LLM_JUIZ_MODELO`, secret `LLM_JUIZ_API_KEY`) e `JUIZ_BLOQUEIA=true`.
+
+## 6. Deploy
 
 `roteiros/setup-azure.md`, depois faça merge na `main`: o workflow **Aula 6 · Deploy do agente** chama
 o gate e só então publica.
