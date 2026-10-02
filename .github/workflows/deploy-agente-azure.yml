@@ -1,15 +1,11 @@
-# Aula 6 — deploy do agente no Azure Web Apps, SÓ depois do agent gate.
+# Aula 6 — deploy do agente no Azure Web Apps: ALTERNATIVA ao deploy no AWS Academy (deploy-agente-aws.yml),
+# para quem prefere o Azure. Só roda manualmente, para não competir com o deploy da AWS a cada push.
 #
-# Por que Azure aqui e não AWS Academy: o capstone fica no ar por dias, e as
-# credenciais do Learner Lab expiram a cada 4h. O publish profile do Azure
-# não expira. Configuração: roteiros/setup-azure.md
-#   variable AZURE_WEBAPP_NAME  ·  secret AZURE_WEBAPP_PUBLISH_PROFILE
+# Configuração: roteiros/setup-azure.md (atenção às regras do Azure for Students da parceria: regiões por
+# aluno, cota). Precisa da variável AZURE_WEBAPP_NAME e do secret AZURE_WEBAPP_PUBLISH_PROFILE.
 name: "Aula 6 · Deploy do agente (Azure Web Apps)"
 
 on:
-  push:
-    branches: [main]
-    paths: ["agente/**"]
   workflow_dispatch:
 
 concurrency: agente-producao

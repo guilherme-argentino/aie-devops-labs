@@ -63,10 +63,21 @@ No workflow: *Actions → Aula 6 · Agent gate → Run workflow → com_juiz*. T
 não há) e deu 2 alarmes falsos. Por isso ele **só informa** por padrão; para bloquear, use um modelo
 maior (`LLM_JUIZ_BASE_URL`, `LLM_JUIZ_MODELO`, secret `LLM_JUIZ_API_KEY`) e `JUIZ_BLOQUEIA=true`.
 
-## 6. Deploy
+## 6. Deploy (AWS Academy por padrão)
 
-`roteiros/setup-azure.md`, depois faça merge na `main`: o workflow **Aula 6 · Deploy do agente** chama
-o gate e só então publica.
+Com as credenciais do Learner Lab nos secrets (`roteiros/setup-aws-academy.md`, passo 3), faça merge na
+`main` (ou *Actions → Aula 6 · Deploy do agente (AWS Lambda) → Run workflow*): o workflow chama o gate e só
+então publica o agente numa função **Lambda** com URL pública, que **continua no ar entre as sessões** do lab.
+
+```bash
+curl https://<sua-function-url>/
+curl -X POST https://<sua-function-url>/chamado -H 'content-type: application/json' \
+  -d '{"texto": "Meu pedido está atrasado há 6 dias úteis"}'
+```
+
+LLM em produção: variável `AGENTE_LLM_PROVEDOR` (`bedrock`, `openai` ou `simulado`, o padrão); veja
+`roteiros/setup-aws-academy.md`, passo 4. **Alternativa:** o Azure Web Apps (`roteiros/setup-azure.md`),
+pelo workflow *Aula 6 · Deploy do agente (Azure Web Apps)*, que roda só manualmente.
 
 ## O que entregar (vira o trabalho final)
 

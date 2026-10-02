@@ -1,8 +1,9 @@
 # Setup — Azure Web Apps (Aula 6 · capstone)
 
-O agente de atendimento vai para um **Azure Web App** (Linux, Python 3.12) pelo GitHub Actions, só depois de
-passar no *agent gate*. É a opção 2 da disciplina (GitHub Actions + Azure Web Sites): o capstone fica no ar por
-dias, e o AWS Academy não segura isso.
+O agente de atendimento pode ir para um **Azure Web App** (Linux, Python 3.12) pelo GitHub Actions, só depois de
+passar no *agent gate*. É a **alternativa** ao deploy padrão no AWS Academy (Lambda, ver
+`roteiros/setup-aws-academy.md`, passo 4): use este caminho se preferir o Azure e tiver o Azure for Students.
+O workflow é **manual** (*Aula 6 · Deploy do agente (Azure Web Apps)*).
 
 > **Fonte das regras abaixo:** reunião Microsoft × FIAP de 28/09/2026 (transcrição em
 > `02_Apoio_Referencia/04_MBA_AIE_CICD/` do repositório do curso). **Testado de ponta a ponta em 2026-10-02**

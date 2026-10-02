@@ -14,10 +14,11 @@ der; stack 100% gratuita quando nenhuma das duas se encaixar.**
 | 3 · GitOps | Repositório de configuração, Argo CD, *drift*, PR com policy-as-code | **Gratuito**: kind + Argo CD no Codespaces | [aula-03](roteiros/aula-03.md) |
 | 4 · Rollout | Canary com aliases ponderados do Lambda, rollback automático | **AWS Academy** (Lambda) | [aula-04](roteiros/aula-04.md) |
 | 5 · MLOps e LLMOps | MLflow: Model Registry com aliases e Prompt Registry | **AWS Academy** (EC2 + S3) ou **gratuito** (MLflow local) | [aula-05](roteiros/aula-05.md) |
-| 6 · Capstone | **Agent gate** sobre o golden dataset + deploy do agente | GitHub Actions + Ollama (gratuito) + **Azure Web Apps** | [aula-06](roteiros/aula-06.md) |
+| 6 · Capstone | **Agent gate** sobre o golden dataset + deploy do agente | GitHub Actions + Ollama (gratuito) no gate; deploy no **AWS Academy** (Lambda), com o Azure Web Apps como alternativa | [aula-06](roteiros/aula-06.md) |
 
-Por que o capstone não fica no AWS Academy: as credenciais do Learner Lab expiram a cada sessão
-de 4h, e o capstone precisa ficar no ar por dias.
+O capstone também fica no AWS Academy: as credenciais expiram a cada sessão de 4h, mas os recursos
+serverless (Lambda, ECR, S3) **continuam no ar** entre as sessões (só as EC2 são paradas no "End Lab").
+Veja `roteiros/setup-aws-academy.md`, passo 4.
 
 ## Antes da primeira aula
 
@@ -29,7 +30,7 @@ de 4h, e o capstone precisa ficar no ar por dias.
 
 ## Estrutura
 
-```
+```text
 azure/           Aula 6     — criar-webapp.sh: cria o Web App descobrindo uma região permitida
 classificador/   Aulas 2 e 4 — classificador de avaliações (treino, model gate, serviço Lambda, canary)
 gitops/          Aula 3     — Kustomize (base + overlays), Argo CD, policy-as-code do PR
