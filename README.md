@@ -67,8 +67,8 @@ python classificador/model_gate.py artefatos/metricas.json
 **Nunca executado** — precisa de conta real ou do GitHub:
 
 - os scripts da AWS (`publicar.sh`, `trafego.sh`, `servidor-mlflow-ec2.sh`) e o uso do Bedrock
-- o deploy no Azure Web Apps
-- os workflows `deploy-classificador`, `canary-classificador` (precisam dos secrets da AWS) e
-  `deploy-agente-azure` (Azure); passaram só no `actionlint`. O `gitops-pr` foi testado com dois PRs reais
+- os workflows `deploy-classificador` e `canary-classificador` (precisam dos secrets da AWS); passaram só no
+  `actionlint`. Já rodaram no GitHub: o CI, o *agent gate*, o `gitops-pr` (dois PRs) e o `deploy-agente-azure`
+  (deploy real num Web App F1 de uma assinatura Visual Studio, agente respondendo; sem LLM real em produção)
 
 Ver o aviso no topo de cada roteiro de setup.

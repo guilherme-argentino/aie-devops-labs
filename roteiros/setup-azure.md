@@ -4,8 +4,11 @@ O agente de atendimento vai para um **Azure Web App** (Linux, Python 3.12) pelo 
 só depois de passar no agent gate. É a opção 2 da disciplina (GitHub Actions + Azure Web Sites):
 usada porque o capstone fica no ar por dias e o AWS Academy não segura isso.
 
-> **Este roteiro não foi testado de ponta a ponta.** O fluxo (App Service F1 + publish profile +
-> `azure/webapps-deploy`) segue a documentação oficial; confira cada passo na primeira execução.
+> **Testado de ponta a ponta em 2026-10-02**, com uma assinatura Visual Studio: criação do Web App F1,
+> workflow `Aula 6 · Deploy do agente` (gate aprovado → `azure/webapps-deploy`, ~130 s → smoke test) e o
+> agente respondendo em `/` e `/chamado`. No teste o app rodou com `LLM_PROVEDOR=simulado`: **um LLM real
+> em produção (Foundry/Azure OpenAI) não foi testado**. Os dois bloqueios que apareceram (cota do F1 por
+> região e SCM basic auth) estão tratados nos passos abaixo.
 
 ## Antes de tudo: você precisa de uma assinatura Azure
 
