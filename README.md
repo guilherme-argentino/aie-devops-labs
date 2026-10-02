@@ -1,0 +1,67 @@
+# AIE · DevOps para IA — repositório dos laboratórios
+
+Código-base dos laboratórios da disciplina **Deploy and CI/CD** do MBA AI Engineering (FIAP).
+Use **Use this template → Create a new repository** (público) e trabalhe no seu.
+
+## Qual stack em cada lab
+
+A regra da disciplina: **AWS Academy primeiro; GitHub Actions + Azure Web Apps quando o Academy não
+der; stack 100% gratuita quando nenhuma das duas se encaixar.**
+
+| Aula | Laboratório | Onde roda | Roteiro |
+|---|---|---|---|
+| 2 · CI/CD para IA | Pipeline do classificador: lint → testes → dados → treino → **model gate** → build → deploy | GitHub Actions + **AWS Academy** (Lambda + ECR) | [aula-02](roteiros/aula-02.md) |
+| 3 · GitOps | Repositório de configuração, Argo CD, *drift*, PR com policy-as-code | **Gratuito**: kind + Argo CD no Codespaces | [aula-03](roteiros/aula-03.md) |
+| 4 · Rollout | Canary com aliases ponderados do Lambda, rollback automático | **AWS Academy** (Lambda) | [aula-04](roteiros/aula-04.md) |
+| 5 · MLOps e LLMOps | MLflow: Model Registry com aliases e Prompt Registry | **AWS Academy** (EC2 + S3) ou **gratuito** (MLflow local) | [aula-05](roteiros/aula-05.md) |
+| 6 · Capstone | **Agent gate** sobre o golden dataset + deploy do agente | GitHub Actions + Ollama (gratuito) + **Azure Web Apps** | [aula-06](roteiros/aula-06.md) |
+
+Por que o capstone não fica no AWS Academy: as credenciais do Learner Lab expiram a cada sessão
+de 4h, e o capstone precisa ficar no ar por dias.
+
+## Antes da primeira aula
+
+1. [`roteiros/setup-aws-academy.md`](roteiros/setup-aws-academy.md) — confira quais serviços o seu Learner Lab libera
+2. [`roteiros/setup-gratuito.md`](roteiros/setup-gratuito.md) — Codespaces (use este ambiente em todas as aulas)
+3. [`roteiros/setup-azure.md`](roteiros/setup-azure.md) — só para a Aula 6
+
+## Estrutura
+
+```
+classificador/   Aulas 2 e 4 — classificador de avaliações (treino, model gate, serviço Lambda, canary)
+gitops/          Aula 3     — Kustomize (base + overlays), Argo CD, policy-as-code do PR
+mlops/           Aula 5     — MLflow: registro de modelo, promoção por alias, Prompt Registry
+agente/          Aulas 5–6  — agente de atendimento (Quantum Commerce), golden dataset, agent gate
+.github/         workflows de cada aula
+roteiros/        passo a passo e setup
+```
+
+## Comandos úteis
+
+```bash
+pytest                                # todos os testes unitários (sem rede)
+ruff check . && ruff format --check . # lint
+python classificador/treino.py        # treina e mede
+python classificador/model_gate.py artefatos/metricas.json
+```
+
+## Status dos testes
+
+**Testado localmente** (pytest: 36 testes; ruff; `actionlint` nos workflows):
+
+- classificador: treino, model gate (aprova a base saudável e reprova o `lote-novo.csv`), imagem do Lambda
+  rodando em Docker e canary contra o alias local (promove o saudável, reverte o que erra 20%)
+- GitOps: Kustomize, Argo CD v3.5.3 em kind sincronizando os dois ambientes a partir de um Git, promoção
+  por commit (~40 s), *drift* (produção fica `OutOfSync`, staging se cura)
+- MLflow 3.16: registro, promoção por alias, bloqueio do lote ruim, rollback e Prompt Registry
+- agent gate: promptfoo 0.123 + Ollama (`qwen2.5:3b`, ~11 min em CPU): 28/36 casos, passa nos pisos
+  de `limites.yaml`; o provedor `simulado` reprova
+
+**Nunca executado** — precisa de conta real ou do GitHub:
+
+- os scripts da AWS (`publicar.sh`, `trafego.sh`, `servidor-mlflow-ec2.sh`) e o uso do Bedrock
+- o deploy no Azure Web Apps
+- os **workflows no GitHub Actions** (validados só por `actionlint`; o primeiro push pode revelar ajustes)
+- o `.devcontainer` (o JSON é válido; a imagem do Codespaces não foi construída)
+
+Ver o aviso no topo de cada roteiro de setup.
