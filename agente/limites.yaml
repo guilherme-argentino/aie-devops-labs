@@ -1,0 +1,12 @@
+# Critérios do agent gate — mudar este arquivo também passa por PR e revisão.
+#
+# Com 6 casos por categoria, cada caso vale ~17 p.p. Estes pisos (4 de 6) foram
+# calibrados contra a baseline REAL do modelo gratuito do laboratório (qwen2.5:3b via
+# Ollama): ele passa; o provedor "simulado" (regras por palavra-chave) não passa na
+# camada de resposta. Ao trocar pelo dataset de 200 chamados e pelo LLM do seu
+# grupo, recalibre: o piso vem da baseline de produção, não de um número redondo.
+piso:
+  roteamento: 0.66
+  recuperacao: 0.66
+  resposta: 0.66
+tolerancia_ruido: 0.17  # cair 1 caso (17 p.p.) pode ser variação do LLM; cair 2 é regressão
