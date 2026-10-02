@@ -38,7 +38,8 @@ GRUPO=rg-aie-capstone
 APP=agente-quantum-$RANDOM            # o nome vira <nome>.azurewebsites.net e precisa ser único
 
 az group create -n $GRUPO -l brazilsouth
-az appservice plan create -g $GRUPO -n plano-aie --is-linux --sku F1
+# O plano F1 depende de cota da sua assinatura POR REGIÃO — veja a nota abaixo se falhar
+az appservice plan create -g $GRUPO -n plano-aie -l centralus --is-linux --sku F1
 az webapp create -g $GRUPO -p plano-aie -n $APP --runtime "PYTHON:3.12"
 
 # Comando de inicialização: o FastAPI do agente, na porta que o App Service espera
@@ -49,6 +50,11 @@ az webapp config appsettings set -g $GRUPO -n $APP --settings \
   LLM_PROVEDOR=openai LLM_BASE_URL=<endpoint do seu LLM> LLM_MODELO=<modelo> LLM_API_KEY=<chave>
 ```
 
+> **Se o `az appservice plan create` falhar** com `Amount required for this deployment (F1 VMs): 1`, a sua
+> assinatura tem **cota 0 de máquinas gratuitas naquela região**. Testado com uma assinatura Visual Studio:
+> `brazilsouth`, `eastus` e `eastus2` falharam e **`centralus` funcionou**. Troque o `-l` e tente de novo
+> (`westus2`, `southcentralus`, `westeurope`...). O grupo de recursos pode ficar em outra região.
+
 O Web App **não roda o Ollama** (não cabe no F1). Em produção, o agente chama um LLM por API:
 Microsoft Foundry / Azure OpenAI (crédito do Azure for Students) ou outro endpoint compatível com a
 API da OpenAI. O Ollama é só para o agent gate no CI.
@@ -56,15 +62,20 @@ API da OpenAI. O Ollama é só para o agent gate no CI.
 ## 2. Ligar o GitHub Actions
 
 ```bash
-# Publish profile: arquivo de credencial do Web App (não expira)
+# 1) Habilite a autenticação básica do SCM. NOVOS Web Apps vêm com ela DESLIGADA (allow=false), e o
+#    azure/webapps-deploy com publish profile leva 401 sem isso.
+az resource update -g $GRUPO --namespace Microsoft.Web --resource-type basicPublishingCredentialsPolicies \
+  --parent sites/$APP -n scm --set properties.allow=true
+
+# 2) Publish profile: arquivo de credencial do Web App (não expira)
 az webapp deployment list-publishing-profiles -g $GRUPO -n $APP --xml > perfil.xml
 gh secret set AZURE_WEBAPP_PUBLISH_PROFILE < perfil.xml
 rm perfil.xml                                  # não deixe a credencial no disco
 gh variable set AZURE_WEBAPP_NAME --body "$APP"
 ```
 
-Se `az` recusar o publish profile, habilite a autenticação básica do SCM em **Web App → Configuration →
-General settings → SCM Basic Auth Publishing Credentials**.
+(No portal, o mesmo botão fica em **Web App → Settings → Configuration → General settings → SCM Basic
+Auth Publishing Credentials**.)
 
 ## 3. Conferir
 
