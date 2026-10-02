@@ -4,13 +4,6 @@ set -euo pipefail
 
 pip install -r requirements.txt -r mlops/requirements.txt
 
-# O pip cai em instalação de usuário (~/.local/bin), que não está no PATH desta imagem:
-# sem isto, `ruff`, `mlflow` e `uvicorn` dariam "command not found" no terminal.
-for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
-  grep -qs '.local/bin' "$rc" || echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$rc"
-done
-export PATH="$HOME/.local/bin:$PATH"
-
 sudo curl -fsSLo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
 sudo chmod +x /usr/local/bin/kind
 
