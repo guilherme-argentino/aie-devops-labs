@@ -1,0 +1,59 @@
+# Aula 6 — Capstone: o agent gate
+
+**Onde roda:** GitHub Actions + Ollama (gratuito) + Azure Web Apps (deploy). **Tempo:** laboratório de 90 min.
+
+Missão do enunciado: *"configurar o pipeline que testa o comportamento dos agentes automaticamente
+antes de cada atualização no site da Quantum"*. Aqui o agente é uma versão mínima (roteador + RAG +
+especialista); no capstone, **troque pelo multiagente do seu grupo** mantendo `atender()`.
+
+## 1. Entender as três camadas
+
+`agente/golden/chamados.csv` tem 36 chamados anotados (6 por categoria). Para cada um o promptfoo mede:
+
+| Camada | Pergunta | Como mede (`promptfooconfig.yaml`) |
+|---|---|---|
+| Roteamento | o chamado foi para a categoria certa? | categoria == anotada |
+| Recuperação | o documento de política certo foi achado? | documento == anotado |
+| Resposta | a resposta cita o fato da política (prazo, valor)? | contém o trecho anotado |
+
+Tudo determinístico — sem LLM-as-judge — para rodar em todo PR sem custo.
+
+## 2. Rodar o gate
+
+```bash
+ollama serve > /dev/null 2>&1 & ollama pull qwen2.5:3b
+npx -y promptfoo@0.123.1 eval -c agente/promptfooconfig.yaml -o resultado-eval.json --no-progress-bar
+python agente/agent_gate.py resultado-eval.json
+```
+
+~10 min em CPU. O resultado é uma tabela **por categoria** e por camada. Os critérios estão em
+`agente/limites.yaml`: pisos por camada e tolerância de ruído.
+
+## 3. A regra que o enunciado pede
+
+*"O que acontece quando uma categoria piora mesmo que a média geral melhore?"*
+
+```bash
+python agente/agent_gate.py resultado-eval.json --salvar-baseline   # fixa a baseline atual
+```
+
+Agora piore **só** `fraude_vendedor` (por exemplo, apague "caixa vazia" do roteador) e melhore outra
+categoria. Rode o eval de novo: o gate reprova pela **regressão da categoria**, mesmo com a média igual
+ou melhor. É a regra 2 do cabeçalho de `agent_gate.py`.
+
+## 4. No CI e o override
+
+Abra um PR mexendo em `agente/prompts/especialista.txt`. O workflow **Aula 6 · Agent gate** roda o
+eval no runner (com Ollama) e escreve a tabela no resumo. Para liberar uma exceção, ponha o rótulo
+`override-agent-gate` no PR — a exceção fica registrada no resumo, com o PR e o autor.
+
+## 5. Deploy
+
+`roteiros/setup-azure.md`, depois faça merge na `main`: o workflow **Aula 6 · Deploy do agente** chama
+o gate e só então publica.
+
+## O que entregar (vira o trabalho final)
+
+Este repositório (esteira + golden dataset + gate funcionando) é o **entregável 1 e 2**. Os
+entregáveis 3 a 6 estão no documento: `gitops/` (repositório de configuração), estratégia de rollout,
+book de métricas e pitch.
