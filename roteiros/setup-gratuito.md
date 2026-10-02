@@ -6,8 +6,10 @@ Usada onde nem o AWS Academy nem o Azure se encaixam: **Aula 3 (GitOps)**, o **a
 ## Codespaces
 
 1. No GitHub, **Use this template → Create a new repository** (deixe **público**: o Argo CD lê o Git sem credencial).
-2. **Code → Codespaces → Create codespace on main**. A primeira criação leva alguns minutos
-   (`.devcontainer/instalar.sh` instala as dependências, o kind e o Ollama).
+2. **Code → Codespaces → Create codespace on main**. A primeira criação leva ~8 min (medido num Codespace
+   de 2 núcleos). **Atenção:** o Codespace aparece como disponível *antes* do `.devcontainer/instalar.sh`
+   terminar (dependências Python, kind e Ollama, ~2 min a mais). Espere o terminal mostrar
+   `Pronto. Próximos passos: roteiros/README.md` antes de rodar qualquer comando.
 3. A conta gratuita dá **120 horas-core por mês**: o `.devcontainer` pede **2 núcleos**, ou seja, ~60 h.
    Se trocar para a máquina de **4 núcleos** (menu do Codespace → *Change machine type*), o eval do
    agent gate e o cluster rodam mais rápido, mas as horas acabam na metade do tempo. **Pare o

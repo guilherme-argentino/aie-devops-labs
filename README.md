@@ -9,7 +9,7 @@ A regra da disciplina: **AWS Academy primeiro; GitHub Actions + Azure Web Apps q
 der; stack 100% gratuita quando nenhuma das duas se encaixar.**
 
 | Aula | Laboratório | Onde roda | Roteiro |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 2 · CI/CD para IA | Pipeline do classificador: lint → testes → dados → treino → **model gate** → build → deploy | GitHub Actions + **AWS Academy** (Lambda + ECR) | [aula-02](roteiros/aula-02.md) |
 | 3 · GitOps | Repositório de configuração, Argo CD, *drift*, PR com policy-as-code | **Gratuito**: kind + Argo CD no Codespaces | [aula-03](roteiros/aula-03.md) |
 | 4 · Rollout | Canary com aliases ponderados do Lambda, rollback automático | **AWS Academy** (Lambda) | [aula-04](roteiros/aula-04.md) |
@@ -57,6 +57,10 @@ python classificador/model_gate.py artefatos/metricas.json
 - MLflow 3.16: registro, promoção por alias, bloqueio do lote ruim, rollback e Prompt Registry
 - agent gate: promptfoo 0.123 + Ollama (`qwen2.5:3b`): 28/36 casos, passa nos pisos de `limites.yaml`;
   o provedor `simulado` reprova. ~11 min numa máquina de 4 núcleos e **13 min no runner do GitHub (2 vCPU)**
+- Codespace de 2 núcleos, criado de verdade: construção do devcontainer, `postCreate`, `pytest` (37 testes),
+  `subir-cluster.sh` (183 s) com o Argo CD sincronizando os dois ambientes do GitHub, *drift* (produção
+  `OutOfSync`, staging se cura) e Ollama (modelo baixado em 52 s). Isso revelou e corrigiu 3 bugs: `moby` na
+  imagem Debian trixie, `zstd` ausente para o Ollama e scripts sem bit de execução.
 - juiz de fidelidade (extra opcional, `qwen2.5:3b`): testado em 6 casos locais — pegou a contradição real e
   deu 2 alarmes falsos, por isso só informa por padrão (ainda não rodou no GitHub)
 
@@ -64,8 +68,7 @@ python classificador/model_gate.py artefatos/metricas.json
 
 - os scripts da AWS (`publicar.sh`, `trafego.sh`, `servidor-mlflow-ec2.sh`) e o uso do Bedrock
 - o deploy no Azure Web Apps
-- os workflows `deploy-classificador`, `canary-classificador` (precisam dos secrets da AWS),
-  `deploy-agente-azure` (Azure) e `gitops-pr` (só roda em PR); passaram só no `actionlint`
-- o `.devcontainer` (o JSON é válido; a imagem do Codespaces não foi construída)
+- os workflows `deploy-classificador`, `canary-classificador` (precisam dos secrets da AWS) e
+  `deploy-agente-azure` (Azure); passaram só no `actionlint`. O `gitops-pr` foi testado com dois PRs reais
 
 Ver o aviso no topo de cada roteiro de setup.
