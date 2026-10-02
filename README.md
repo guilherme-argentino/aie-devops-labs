@@ -23,11 +23,14 @@ de 4h, e o capstone precisa ficar no ar por dias.
 
 1. [`roteiros/setup-aws-academy.md`](roteiros/setup-aws-academy.md) — confira quais serviços o seu Learner Lab libera
 2. [`roteiros/setup-gratuito.md`](roteiros/setup-gratuito.md) — Codespaces (use este ambiente em todas as aulas)
-3. [`roteiros/setup-azure.md`](roteiros/setup-azure.md) — só para a Aula 6
+3. [`roteiros/setup-azure.md`](roteiros/setup-azure.md) — só para a Aula 6. **Leia as regras da parceria:** a sua
+   assinatura do Azure for Students só cria recursos em **algumas regiões (a sua lista é só sua)**; descubra-as
+   antes. O script `azure/criar-webapp.sh` faz isso por você
 
 ## Estrutura
 
 ```
+azure/           Aula 6     — criar-webapp.sh: cria o Web App descobrindo uma região permitida
 classificador/   Aulas 2 e 4 — classificador de avaliações (treino, model gate, serviço Lambda, canary)
 gitops/          Aula 3     — Kustomize (base + overlays), Argo CD, policy-as-code do PR
 mlops/           Aula 5     — MLflow: registro de modelo, promoção por alias, Prompt Registry
