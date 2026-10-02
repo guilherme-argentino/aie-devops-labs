@@ -15,7 +15,16 @@ on:
     paths: ["agente/**", ".github/workflows/agent-gate.yml"]
     types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
+    inputs:
+      com_juiz:
+        description: "Rodar também o juiz de fidelidade (LLM-as-judge, extra opcional)"
+        type: boolean
+        default: false
   workflow_call:   # o deploy chama este workflow antes de publicar
+    inputs:
+      com_juiz:
+        type: boolean
+        default: false
 
 jobs:
   testes:
@@ -88,8 +97,26 @@ jobs:
                           github.event.pull_request.number, github.actor) || '' }}
         run: python agente/agent_gate.py resultado-eval.json
 
+      # Extra opcional: o gate acima só confere se o fato foi citado; o juiz pega a resposta que
+      # contradiz a política. Juiz padrão = o mesmo Ollama (fraco); configure LLM_JUIZ_BASE_URL,
+      # LLM_JUIZ_MODELO e o secret LLM_JUIZ_API_KEY para usar um modelo maior.
+      - name: Juiz de fidelidade (opcional)
+        if: ${{ inputs.com_juiz }}
+        env:
+          LLM_JUIZ_BASE_URL: ${{ vars.LLM_JUIZ_BASE_URL }}
+          LLM_JUIZ_MODELO: ${{ vars.LLM_JUIZ_MODELO }}
+          LLM_JUIZ_API_KEY: ${{ secrets.LLM_JUIZ_API_KEY }}
+          JUIZ_BLOQUEIA: ${{ vars.JUIZ_BLOQUEIA }}   # "true" só com um juiz forte; padrão: informativo
+        run: |
+          npx -y promptfoo@0.123.1 eval -c agente/promptfooconfig-juiz.yaml \
+            -o resultado-juiz.json --no-progress-bar --no-table || true
+          python agente/juiz_resumo.py resultado-juiz.json
+
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: resultado-agent-gate
-          path: resultado-eval.json
+          path: |
+            resultado-eval.json
+            resultado-juiz.json
+          if-no-files-found: ignore

@@ -17,6 +17,9 @@ concurrency: agente-producao
 jobs:
   gate:
     uses: ./.github/workflows/agent-gate.yml
+    with:
+      # defina a variável AGENT_GATE_JUIZ=true (Settings → Variables) para o juiz rodar no merge
+      com_juiz: ${{ vars.AGENT_GATE_JUIZ == 'true' }}
     secrets: inherit
 
   deploy:
