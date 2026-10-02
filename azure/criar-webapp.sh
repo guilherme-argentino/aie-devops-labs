@@ -4,6 +4,8 @@
 #   azure/criar-webapp.sh                 # cria e já liga o GitHub (secret + variável) no repositório atual
 #   REGIOES="brazilsouth eastus" azure/criar-webapp.sh   # força a lista de regiões a tentar
 #   SEM_GITHUB=1 azure/criar-webapp.sh    # só cria no Azure
+#   azure/criar-webapp.sh --diagnostico   # NÃO cria o Web App: testa TODAS as regiões e imprime um relatório
+#                                         # para você colar e mandar ao professor (rode antes da Aula 6)
 #
 # Por que existe: no Azure for Students da parceria FIAP × Microsoft a assinatura de CADA aluno só pode criar
 # recursos em algumas regiões (política "Allowed resource deployment regions", em geral ~5, diferentes por
@@ -16,6 +18,9 @@
 # Pré-requisitos: `az login` com uma conta que TENHA assinatura (a conta @fiap.com.br sozinha não tem;
 # ative o Azure for Students) e, para ligar o GitHub, `gh auth login`.
 set -uo pipefail
+
+DIAGNOSTICO="${DIAGNOSTICO:-}"
+if [ "${1:-}" = "--diagnostico" ]; then DIAGNOSTICO=1; shift; fi
 
 GRUPO_BASE="${GRUPO:-rg-aie-capstone}"
 APP="${1:-agente-quantum-$RANDOM}"      # vira <nome>.azurewebsites.net e precisa ser único
@@ -50,26 +55,45 @@ fi
 echo "Regiões a tentar (${ORIGEM}):"; echo "$CANDIDATAS" | tr ' ' '\n' | sed 's/^/  - /'
 
 # 2. Tenta região por região: grupo de recursos + plano. O grupo também obedece à política de regiões.
-REGIAO=""; GRUPO=""
+REGIAO=""; GRUPO=""; RESULTADOS=()
+[ -n "$DIAGNOSTICO" ] && echo "(modo diagnóstico: testo cada região criando e apagando um plano; leva alguns minutos)"
 for loc in $CANDIDATAS; do
   g="${GRUPO_BASE}-${loc}"
   printf '\n→ %s ... ' "$loc"
   saida=$(az group create -n "$g" -l "$loc" -o none 2>&1) || {
     if echo "$saida" | grep -qi "RequestDisallowedByPolicy\|disallowed by policy"; then
-      echo "proibida pela política de regiões (grupo de recursos)"
-    else echo "não consegui criar o grupo: $(echo "$saida" | tail -1 | cut -c1-120)"; fi
+      echo "proibida pela política de regiões (grupo de recursos)"; RESULTADOS+=("$loc|PROIBIDA pela política de regiões")
+    else echo "não consegui criar o grupo: $(echo "$saida" | tail -1 | cut -c1-120)"; RESULTADOS+=("$loc|erro ao criar o grupo"); fi
     continue
   }
-  saida=$(az appservice plan create -g "$g" -n "$PLANO" -l "$loc" --is-linux --sku "$SKU" -o none 2>&1) && { REGIAO="$loc"; GRUPO="$g"; echo "ok"; break; }
+  saida=$(az appservice plan create -g "$g" -n "$PLANO" -l "$loc" --is-linux --sku "$SKU" -o none 2>&1) && {
+    echo "ok"; RESULTADOS+=("$loc|OK (tem cota de $SKU)")
+    if [ -n "$DIAGNOSTICO" ]; then az group delete -n "$g" --yes --no-wait >/dev/null 2>&1; continue; fi
+    REGIAO="$loc"; GRUPO="$g"; break
+  }
   if echo "$saida" | grep -qi "RequestDisallowedByPolicy\|disallowed by policy"; then
-    echo "proibida pela política de regiões (plano)"
+    echo "proibida pela política de regiões (plano)"; RESULTADOS+=("$loc|PROIBIDA pela política de regiões")
   elif echo "$saida" | grep -qi "Amount required for this deployment\|quota"; then
-    echo "sem cota/capacidade de $SKU nesta região"
+    echo "sem cota/capacidade de $SKU nesta região"; RESULTADOS+=("$loc|sem cota/capacidade de $SKU")
   else
-    echo "erro: $(echo "$saida" | tail -1 | cut -c1-140)"
+    echo "erro: $(echo "$saida" | tail -1 | cut -c1-140)"; RESULTADOS+=("$loc|erro: $(echo "$saida" | tail -1 | cut -c1-60)")
   fi
   az group delete -n "$g" --yes --no-wait >/dev/null 2>&1   # limpa o grupo vazio da tentativa
 done
+
+if [ -n "$DIAGNOSTICO" ]; then
+  echo; echo "=========== RELATÓRIO — copie tudo daqui até a linha final e mande ao professor ==========="
+  echo "data (UTC):          $(date -u +%F)"
+  echo "conta:               $(az account show --query user.name -o tsv | limpa)"
+  echo "assinaturas ativas:  $(az account list --query "[?state=='Enabled'].name" -o tsv | limpa | paste -sd ';' -)"
+  echo "regiões lidas de:    $ORIGEM" | cut -c1-110
+  echo "SKU testado:         $SKU"
+  echo "-------------------------------------------------------------------------------------------"
+  printf '%-18s %s\n' "REGIÃO" "RESULTADO"
+  for r in "${RESULTADOS[@]}"; do printf '%-18s %s\n' "${r%%|*}" "${r#*|}"; done
+  echo "==========================================================================================="
+  exit 0
+fi
 
 if [ -z "$REGIAO" ]; then
   echo; echo "❌ Nenhuma região funcionou. Causas prováveis: política de regiões da sua conta, cota de $SKU"

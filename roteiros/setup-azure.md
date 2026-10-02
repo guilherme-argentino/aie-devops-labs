@@ -50,6 +50,20 @@ az policy assignment list --query "[].parameters.listOfAllowedLocations.value[]"
 Anote as regiões. O script da seção 3 lê essa mesma política sozinho; se não conseguir, você passa a lista com
 `REGIOES="..."`.
 
+## 2b. Diagnóstico: faça cedo, antes da Aula 6
+
+Para descobrir **agora**, e não no dia da entrega, se você consegue criar o Web App:
+
+```bash
+az login --use-device-code                    # no Codespace
+azure/criar-webapp.sh --diagnostico
+```
+
+Ele **não cria o Web App**: tenta criar e apagar um plano B1 em cada região (leva alguns minutos) e imprime um
+relatório (conta, assinaturas, e por região: `OK`, `PROIBIDA pela política` ou `sem cota/capacidade`).
+**Copie o relatório e mande ao professor.** Se nenhuma região der `OK`, avise já: é a informação que permite
+ajudar você (ou oferecer outra forma de entregar) a tempo.
+
 ## 3. Criar o Web App (automático)
 
 ```bash
