@@ -14,6 +14,16 @@ FUNCAO="${FUNCAO:-classificador-avaliacoes}"
 VERSAO="${MODELO_VERSAO:-$(git rev-parse --short HEAD)}"
 ERRO_SIMULADO="${ERRO_SIMULADO:-0}"
 
+# O Dockerfile copia o modelo treinado: sem ele o build falharia só depois do login no ECR.
+if [ ! -f artefatos/modelo.joblib ]; then
+  echo "ERRO: artefatos/modelo.joblib não existe (rode este script na raiz do repositório)." >&2
+  echo "O Dockerfile copia o modelo treinado; gere-o antes:" >&2
+  echo "  python -m venv .venv && source .venv/bin/activate" >&2
+  echo "  pip install -r requirements.txt" >&2
+  echo "  python classificador/treino.py" >&2
+  exit 1
+fi
+
 CONTA=$(aws sts get-caller-identity --query Account --output text)
 REGISTRY="$CONTA.dkr.ecr.$AWS_REGION.amazonaws.com"
 IMAGEM="$REGISTRY/$FUNCAO:$VERSAO"
