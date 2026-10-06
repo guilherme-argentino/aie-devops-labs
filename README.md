@@ -10,6 +10,7 @@ der; stack 100% gratuita quando nenhuma das duas se encaixar.**
 
 | Aula | Laboratório | Onde roda | Roteiro |
 | --- | --- | --- | --- |
+| 1 · Cultura DevOps | CODEOWNERS: branch → teste → PR → revisão → merge protegido | GitHub + terminal/Codespace | [aula-01-codeowners](roteiros/aula-01-codeowners.md) |
 | 2 · CI/CD para IA | Pipeline do classificador: lint → testes → dados → treino → **model gate** → build → deploy | GitHub Actions + **AWS Academy** (Lambda + ECR) | [aula-02](roteiros/aula-02.md) |
 | 3 · GitOps | Repositório de configuração, Argo CD, *drift*, PR com policy-as-code | **Gratuito**: kind + Argo CD no Codespaces | [aula-03](roteiros/aula-03.md) |
 | 4 · Rollout | Canary com aliases ponderados do Lambda, rollback automático | **AWS Academy** (Lambda) | [aula-04](roteiros/aula-04.md) |
