@@ -21,6 +21,8 @@ O capstone também fica no AWS Academy: as credenciais expiram a cada sessão de
 serverless (Lambda, ECR, S3) **continuam no ar** entre as sessões (só as EC2 são paradas no "End Lab").
 Veja `roteiros/setup-aws-academy.md`, passo 4.
 
+> **Já tem uma cópia e o template mudou?** O *Use this template* não atualiza sozinho: veja [`roteiros/atualizar-sua-copia.md`](roteiros/atualizar-sua-copia.md).
+
 ## Antes da primeira aula
 
 1. [`roteiros/setup-aws-academy.md`](roteiros/setup-aws-academy.md) — confira quais serviços o seu Learner Lab libera
