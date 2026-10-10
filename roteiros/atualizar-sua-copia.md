@@ -4,11 +4,14 @@ Você criou o seu repositório com **Use this template**. Isso faz uma **cópia 
 recebe as correções e os arquivos novos que o professor publica depois (por isso o botão "Sync fork" não aparece). Este
 roteiro mostra como trazer essas mudanças para a sua cópia, ou quando é mais simples começar uma nova.
 
+> **Aula 2:** não precisa atualizar. O que a Aula 2 usa (classificador, testes e workflows) já estava no template quando você criou a cópia
+> na Aula 1. Mantenha a sua cópia (e o seu laboratório de CODEOWNERS) e só trabalhe numa branch se a sua `main` estiver protegida.
+
 ## Qual caminho escolher
 
 | Situação | Caminho |
 |---|---|
-| Você quase não mexeu na cópia, ou vai começar uma nova aula do zero | **A · Criar uma nova cópia** (mais simples) |
+| Você não configurou nada na cópia (sem CODEOWNERS nem proteção da `main`) | **A · Criar uma nova cópia** (mais simples) |
 | Você tem trabalho seu na cópia e quer só **trazer arquivos novos ou corrigidos** | **B · Trazer arquivos do template** (recomendado) |
 | Você é experiente em Git e quer o histórico mesclado | C · `merge` (avançado, dá conflito em quase tudo) |
 
@@ -91,5 +94,6 @@ você nunca tocou. Resolva um a um (ou use o caminho B).
 
 ## Quando atualizar
 
-Quando o professor avisar que o template mudou (ou antes de uma aula nova). Não precisa a cada aula: o caminho **A** costuma
-ser mais rápido do que atualizar uma cópia com muitos arquivos mudados.
+Quando o professor avisar que o template mudou, ou quando uma aula nova usar arquivos que a sua cópia não tem. Se a sua cópia tem o
+laboratório de CODEOWNERS e a proteção da `main` (que a Aula 3 reaproveita), prefira o caminho **B**: o **A** obriga a refazer essa
+configuração.
