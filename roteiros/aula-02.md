@@ -49,6 +49,19 @@ alias `producao` e testa a URL pública. A URL aparece no resumo da execução.
 Adicione ao `test_dados.py` uma checagem de **tamanho do texto** (média de palavras por avaliação
 dentro de ±30% da base de treino) e faça o lote-novo falhar também por ela.
 
+## Se você usa a cópia da Aula 1 (a `main` está protegida)
+
+A cópia da Aula 1 **já traz tudo de hoje**: não crie outra nem refaça o laboratório de CODEOWNERS. Como a `main` está protegida, o
+`git push` direto é recusado: trabalhe numa branch e abra um Pull Request (o CI roda no PR do mesmo jeito):
+
+```bash
+git switch -c aula-2
+git push -u origin aula-2
+gh pr create --fill
+```
+
+O deploy (etapa 7) é manual, com `gh workflow run`, então não depende de `push` na `main`.
+
 ## Quando travar
 
 - Sem o botão *Use this template*: você não está logado no GitHub.
