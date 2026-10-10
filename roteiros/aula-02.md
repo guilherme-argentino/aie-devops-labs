@@ -1,9 +1,13 @@
 # Aula 2 — Pipeline de CI/CD do classificador
 
-**Onde roda:** GitHub Actions + AWS Academy (Lambda + ECR). **Tempo:** ~40 min.
+**Onde roda:** GitHub Actions + AWS Academy (Lambda + ECR). **Tempo:** ~22 min de prática, depois de uma **demo de 5 min** do professor (template, Codespace, `git push`, CI e o gate reprovando). Em **salas do Teams**, com o tempo na tela; o professor entra nas salas sob demanda.
 
 O classificador rotula avaliações de produto (positiva, negativa, neutra). Você vai fazer o pipeline
-de sete etapas da aula rodar de verdade.
+de sete etapas da aula rodar de verdade. Não usa Git no dia a dia? Forme dupla com quem usa: quem usa digita, quem não usa decide os
+critérios (qual regra bloqueia, qual só alerta).
+
+**Antes de começar:** use **Use this template** logado no GitHub (sem login o botão não aparece), crie a cópia **pública** e abra
+um Codespace; ele aparece como "disponível" antes de terminar, então espere o terminal acabar de configurar (~8 min).
 
 ## 1. Ver o pipeline passar
 
@@ -44,3 +48,23 @@ alias `producao` e testa a URL pública. A URL aparece no resumo da execução.
 
 Adicione ao `test_dados.py` uma checagem de **tamanho do texto** (média de palavras por avaliação
 dentro de ±30% da base de treino) e faça o lote-novo falhar também por ela.
+
+## Se você usa a cópia da Aula 1 (a `main` está protegida)
+
+A cópia da Aula 1 **já traz tudo de hoje**: não crie outra nem refaça o laboratório de CODEOWNERS. Como a `main` está protegida, o
+`git push` direto é recusado: trabalhe numa branch e abra um Pull Request (o CI roda no PR do mesmo jeito):
+
+```bash
+git switch -c aula-2
+git push -u origin aula-2
+gh pr create --fill
+```
+
+O deploy (etapa 7) é manual, com `gh workflow run`, então não depende de `push` na `main`.
+
+## Quando travar
+
+- Sem o botão *Use this template*: você não está logado no GitHub.
+- Terminal vazio ou com erro logo após abrir o Codespace: espere terminar de configurar (~8 min).
+- Pediram senha ou token: não digite nem diga em voz alta; a aula é gravada. Chame o professor.
+- Credenciais da AWS expiradas ou serviço bloqueado: use o **plano B** (rodar o mesmo contêiner localmente); o aprendizado do CI e do gate não depende da nuvem.
