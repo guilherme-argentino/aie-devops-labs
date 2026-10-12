@@ -17,8 +17,9 @@ der; stack 100% gratuita quando nenhuma das duas se encaixar.**
 | 5 · MLOps e LLMOps | MLflow: Model Registry com aliases e Prompt Registry | **AWS Academy** (EC2 + S3) ou **gratuito** (MLflow local) | [aula-05](roteiros/aula-05.md) |
 | 6 · Capstone | **Agent gate** sobre o golden dataset + deploy do agente | GitHub Actions + Ollama (gratuito) no gate; deploy no **AWS Academy** (Lambda), com o Azure Web Apps como alternativa | [aula-06](roteiros/aula-06.md) |
 
-O capstone também fica no AWS Academy: as credenciais expiram a cada sessão de 4h, mas os recursos
-serverless (Lambda, ECR, S3) **continuam no ar** entre as sessões (só as EC2 são paradas no "End Lab").
+O capstone também fica no AWS Academy: as credenciais expiram a cada sessão de 4h e, com o lab encerrado,
+a URL da função Lambda responde 502 e a EC2 troca de IP: ligue o lab (*Start Lab*) e refaça o deploy se precisar
+(1 a 2 min). *A validar:* se o capstone precisa ficar acessível sem o lab (teste de 12/10/2026).
 Veja `roteiros/setup-aws-academy.md`, passo 4.
 
 > **Já tem uma cópia e o template mudou?** O *Use this template* não atualiza sozinho: veja [`roteiros/atualizar-sua-copia.md`](roteiros/atualizar-sua-copia.md).

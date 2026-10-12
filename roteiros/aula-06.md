@@ -67,7 +67,7 @@ maior (`LLM_JUIZ_BASE_URL`, `LLM_JUIZ_MODELO`, secret `LLM_JUIZ_API_KEY`) e `JUI
 
 Com as credenciais do Learner Lab nos secrets (`roteiros/setup-aws-academy.md`, passo 3), faça merge na
 `main` (ou *Actions → Aula 6 · Deploy do agente (AWS Lambda) → Run workflow*): o workflow chama o gate e só
-então publica o agente numa função **Lambda** com URL pública, que **continua no ar entre as sessões** do lab.
+então publica o agente numa função **Lambda** com URL pública, que **só responde com o lab aberto** (a validar com a coordenação se o capstone precisa ficar acessível sem o lab).
 
 ```bash
 curl https://<sua-function-url>/

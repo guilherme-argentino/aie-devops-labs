@@ -12,7 +12,7 @@ O AWS Academy é a plataforma **prioritária** da disciplina.
 | Limite | Efeito nos laboratórios |
 |---|---|
 | Só `us-east-1` e `us-west-2` | Todos os scripts usam `us-east-1` |
-| Sessão de **4 horas**; credenciais novas a cada "Start Lab" | O GitHub Actions precisa dos secrets atualizados **a cada deploy** (passo 3). **Os recursos continuam no ar** entre as sessões (veja o passo 4) |
+| Sessão de **4 horas**; credenciais novas a cada "Start Lab" | O GitHub Actions precisa dos secrets atualizados **a cada deploy** (passo 3). **Com o lab encerrado, a URL da Lambda responde 502**: ligue o lab e refaça o deploy (veja o passo 4) |
 | IAM quase bloqueado: sem criar usuário, role ou provedor OIDC | Só existem a `LabRole` e a `LabInstanceProfile`; o Actions não consegue usar OIDC |
 | Crédito de US$ 100 por aluno | Lambda, ECR e S3 custam centavos; **pare o EC2 do MLflow** ao fim da aula |
 | EC2 só `nano` a `large`; Lambda, ECR, S3, SSM, CloudWatch, Secrets Manager liberados | Cabe nos labs |
@@ -68,10 +68,11 @@ Crie também o environment `producao` (Settings → Environments) — os workflo
 ## 4. O capstone (Aula 6) também fica no Academy
 
 O guia do educador diz que *"services deployed by students are available until the end date designated by the
-educator"* e que, ao encerrar a sessão, o "End Lab" só **para as EC2**: os demais recursos continuam
-disponíveis. Então uma função **Lambda** com Function URL **continua no ar entre as sessões**; só as
-credenciais expiram, e você só precisa de credenciais novas **na hora de fazer um novo deploy**. Por isso o
-agente vai para o Lambda por padrão (workflow **Aula 6 · Deploy do agente (AWS Lambda)**).
+educator"* e que o "End Lab" só **para as EC2**. **O teste de 12/10/2026 não confirmou isso para a Lambda:** com o
+lab encerrado a Function URL respondeu **502** (por pelo menos 13 min) e voltou depois do *Start Lab*; a EC2 fica
+`running`, mas **troca de IP**. Na prática: ligue o lab, copie credenciais novas e, se precisar, refaça o deploy
+(1 a 2 min). O agente vai para o Lambda por padrão (workflow **Aula 6 · Deploy do agente (AWS Lambda)**);
+se a correção do capstone exigir o sistema rodando sem o lab, use o Azure Web Apps (*a validar* com a coordenação).
 
 Cuidados:
 

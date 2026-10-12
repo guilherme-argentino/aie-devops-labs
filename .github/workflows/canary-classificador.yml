@@ -65,9 +65,13 @@ jobs:
         id: analise
         continue-on-error: true
         run: |
+          # Sem pipefail o tee engole o código de saída do canary_check e a versão ruim seria promovida.
+          set +e
           python classificador/deploy/canary_check.py "${{ steps.trafego.outputs.url }}" \
             --requisicoes ${{ inputs.requisicoes }} | tee analise.txt
+          rc=${PIPESTATUS[0]}
           { echo '```'; cat analise.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          exit $rc
 
       - name: Promover (100% na candidata)
         if: steps.analise.outcome == 'success'

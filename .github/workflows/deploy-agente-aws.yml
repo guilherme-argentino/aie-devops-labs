@@ -1,8 +1,8 @@
 # Aula 6 — deploy do agente no AWS Academy (Lambda + ECR), SÓ depois do agent gate. É o caminho padrão.
 #
 # Precisa dos secrets AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY e AWS_SESSION_TOKEN do Learner Lab. Eles
-# expiram com a sessão de 4h, mas a função e a URL pública CONTINUAM NO AR depois disso (só as EC2 são
-# paradas no "End Lab"): cole credenciais novas só quando for fazer um novo deploy.
+# expiram com a sessão de 4h. Com o lab encerrado (End Lab) a URL pública da função responde 502 até o próximo
+# Start Lab (teste de 12/10/2026): ligue o lab, cole credenciais novas e rode o deploy de novo (1 a 2 min).
 #
 # LLM do agente em produção (Settings → Secrets and variables → Actions); sem nada, usa o provedor simulado:
 #   variável AGENTE_LLM_PROVEDOR  bedrock (se o seu Learner Lab liberar) | openai | simulado
