@@ -6,6 +6,29 @@ roteiro mostra como trazer essas mudanças para a sua cópia, ou quando é mais 
 
 > **Aula 2:** não precisa atualizar. O que a Aula 2 usa (classificador, testes e workflows) já estava no template quando você criou a cópia
 > na Aula 1. Mantenha a sua cópia (e o seu laboratório de CODEOWNERS) e só trabalhe numa branch se a sua `main` estiver protegida.
+>
+> **Antes da Aula 4: atualize.** O workflow do canary (`.github/workflows/canary-classificador.yml`) foi corrigido em 12/10/2026: a versão
+> sem a correção **promovia a versão ruim** mesmo quando a análise pedia rollback.
+
+## O que mudou no template
+
+| Data | Arquivos | Para quê |
+|---|---|---|
+| 10/10/2026 | `roteiros/aula-02.md`, `roteiros/atualizar-sua-copia.md`, `README.md` | roteiros novos (leia direto no GitHub) |
+| 12/10/2026 | `.github/workflows/canary-classificador.yml` | **correção do canary** (Aula 4) |
+| 12/10/2026 | `.github/workflows/deploy-agente-aws.yml`, `roteiros/aula-06.md`, `roteiros/setup-aws-academy.md`, `README.md` | só textos: com o lab encerrado a URL da Lambda pode dar 502 |
+
+**Atalho para o caso comum** (você só fez o laboratório da Aula 1 e não editou nada além do `CODEOWNERS` e do teste dele):
+
+```bash
+git remote add template https://github.com/guilherme-argentino/aie-devops-labs.git   # só na primeira vez
+git fetch template
+git checkout template/main -- .github/workflows/canary-classificador.yml roteiros
+git add -A && git commit -m "Atualiza do template" && git push
+```
+
+Testado numa cópia simulada (histórico independente, estado da Aula 1): o canary da cópia fica com a correção e os roteiros ficam iguais aos do template.
+Não traga `.github` inteiro: sobrescreve o seu `CODEOWNERS`.
 
 ## Qual caminho escolher
 

@@ -22,7 +22,30 @@ a URL da função Lambda responde 502 e a EC2 troca de IP: ligue o lab (*Start L
 (1 a 2 min). *A validar:* se o capstone precisa ficar acessível sem o lab (teste de 12/10/2026).
 Veja `roteiros/setup-aws-academy.md`, passo 4.
 
-> **Já tem uma cópia e o template mudou?** O *Use this template* não atualiza sozinho: veja [`roteiros/atualizar-sua-copia.md`](roteiros/atualizar-sua-copia.md).
+## Atualizando a sua cópia
+
+O *Use this template* faz uma **cópia independente** (não é *fork*): ela **não** recebe sozinha o que o professor publica depois.
+Passo a passo completo, com os casos de `main` protegida e de `push` recusado: [`roteiros/atualizar-sua-copia.md`](roteiros/atualizar-sua-copia.md).
+
+**O que mudou no template desde a Aula 1, e quem precisa atualizar:**
+
+| Data | O que mudou | Precisa atualizar? |
+| --- | --- | --- |
+| 10/10/2026 | `roteiros/aula-02.md` (demo de 5 min, salas do Teams, "quando travar") e `roteiros/atualizar-sua-copia.md` | Não: leia direto aqui no GitHub |
+| 12/10/2026 | **`.github/workflows/canary-classificador.yml`: o canary promovia a versão ruim** (corrigido); avisos sobre o fim do lab nos roteiros | **Sim, antes da Aula 4** |
+
+**Aula 2: não precisa atualizar** (classificador, testes e workflows da Aula 2 não mudaram). **Antes da Aula 4**, no terminal do Codespace, dentro da sua cópia
+(só vale se você não editou esses arquivos):
+
+```bash
+git remote add template https://github.com/guilherme-argentino/aie-devops-labs.git   # só na primeira vez
+git fetch template
+git checkout template/main -- .github/workflows/canary-classificador.yml roteiros
+git add -A && git commit -m "Atualiza do template" && git push
+```
+
+Se a sua `main` está protegida, faça numa branch e abra um Pull Request. Se o `push` for recusado por causa do workflow, edite o arquivo pelo
+navegador (detalhes no roteiro). **Não** traga a pasta `.github` inteira: ela sobrescreve o seu `CODEOWNERS` da Aula 1.
 
 ## Antes da primeira aula
 
