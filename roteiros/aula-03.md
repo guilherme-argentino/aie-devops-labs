@@ -1,6 +1,6 @@
 # Aula 3 — Repositório GitOps com Argo CD
 
-**Onde roda:** Codespaces (gratuito). **Tempo:** ~40 min.
+**Onde roda:** Codespaces (gratuito). **Tempo:** ~27 min (seções 1 a 3), logo depois do intervalo. O `selfHeal` da seção 3 e a seção 4 são **bônus** para quem terminar antes: a teoria de drift e de PR como gate vem depois do laboratório.
 
 Pré-requisito: o repositório precisa ser **público** e o código na branch `main`.
 
@@ -33,10 +33,10 @@ kubectl -n agente-producao scale deploy/agente-suporte --replicas=5
 gitops/scripts/consultar.sh      # produção fica OutOfSync; o Git ainda diz 3 réplicas
 ```
 
-Produção tem `selfHeal: false` (só alerta). Troque para `true` em `gitops/apps/agente-producao.yaml`,
+**Bônus:** produção tem `selfHeal: false` (só alerta). Troque para `true` em `gitops/apps/agente-producao.yaml`,
 faça o merge e repita o drift. **Qual política vocês escolhem para produção, e por quê?**
 
-## 4. Quebrar a política de propósito
+## 4. Quebrar a política de propósito (bônus)
 
 Em um PR, troque `PROMPT_VERSAO=v12` por `latest` e adicione `OPENAI_API_KEY=sk-123`. O check do PR
 deve reprovar com os dois motivos. Rollback do prompt: `git revert` do merge — em quanto tempo

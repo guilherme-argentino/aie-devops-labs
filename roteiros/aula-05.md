@@ -1,6 +1,6 @@
 # Aula 5 — MLflow: Model Registry e Prompt Registry
 
-**Onde roda:** AWS Academy (EC2 + S3) ou gratuito (MLflow local). **Tempo:** ~40 min.
+**Onde roda:** AWS Academy (EC2 + S3) ou gratuito (MLflow local). **Tempo:** ~15 min (seções 1 a 4), logo depois do intervalo. A seção 5 (Prompt Registry) é **bônus**: o laboratório da aula cobre só o Model Registry; prompt e avaliação contínua ficam na teoria.
 
 ## 1. Onde fica o MLflow
 
@@ -39,7 +39,7 @@ python mlops/registrar_modelo.py --C 8 && python mlops/promover.py     # versão
 python mlops/promover.py --rollback                                    # volta para @anterior
 ```
 
-## 5. Prompts: o Prompt Registry (LLMOps)
+## 5. Prompts: o Prompt Registry (LLMOps) — bônus
 
 ```bash
 python mlops/registrar_prompts.py -m "versão inicial"           # prompts do agente, com o commit

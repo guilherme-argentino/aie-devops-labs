@@ -1,6 +1,6 @@
 # Aula 4 — Canary com aliases ponderados do Lambda
 
-**Onde roda:** AWS Academy (Lambda). **Tempo:** ~30 min.
+**Onde roda:** AWS Academy (Lambda). **Tempo:** ~35 min (com o compartilhamento de 1 min por grupo), logo depois do intervalo.
 
 Pré-requisito: o deploy da Aula 2 já feito (a função `classificador-avaliacoes` e o alias `producao`).
 

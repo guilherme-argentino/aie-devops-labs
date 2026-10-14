@@ -1,6 +1,6 @@
 # Aula 6 — Capstone: o agent gate
 
-**Onde roda:** GitHub Actions + Ollama (gratuito) + Azure Web Apps (deploy). **Tempo:** laboratório de 90 min.
+**Onde roda:** GitHub Actions + Ollama (gratuito) + Azure Web Apps (deploy). **Tempo:** o laboratório ocupa a noite: ~35 min de desenho da esteira antes do intervalo (nos slides) e ~50 min de código depois dele (este roteiro).
 
 Missão do enunciado: *"configurar o pipeline que testa o comportamento dos agentes automaticamente
 antes de cada atualização no site da Quantum"*. Aqui o agente é uma versão mínima (roteador + RAG +

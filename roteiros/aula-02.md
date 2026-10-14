@@ -1,6 +1,6 @@
 # Aula 2 — Pipeline de CI/CD do classificador
 
-**Onde roda:** GitHub Actions + AWS Academy (Lambda + ECR). **Tempo:** ~22 min de prática, depois de uma **demo de 5 min** do professor (template, Codespace, `git push`, CI e o gate reprovando). Em **salas do Teams**, com o tempo na tela; o professor entra nas salas sob demanda.
+**Onde roda:** GitHub Actions + AWS Academy (Lambda + ECR). **Tempo:** ~22 min de prática, logo depois do intervalo e de uma **demo de 5 min** do professor (template, Codespace, `git push`, CI e o gate reprovando). Em **salas do Teams**, com o tempo na tela; o professor entra nas salas sob demanda.
 
 O classificador rotula avaliações de produto (positiva, negativa, neutra). Você vai fazer o pipeline
 de sete etapas da aula rodar de verdade. Não usa Git no dia a dia? Forme dupla com quem usa: quem usa digita, quem não usa decide os
