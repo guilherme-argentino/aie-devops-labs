@@ -41,7 +41,7 @@ gitops/scripts/consultar.sh      # produção fica OutOfSync; o Git ainda diz 3 
 ```
 
 Esse `kubectl` é o que um **agente de SRE com acesso ao cluster** faria para "resolver" um alerta de produção. **Pergunta do grupo:**
-se quem rodou o comando fosse um agente, onde ele pode agir direto e onde só pode abrir um PR? Anotem a regra em uma linha.
+se quem rodou o comando fosse um agente, onde ele pode agir direto e onde só pode abrir um PR? Postem essa regra dentro da linha do chat dos últimos 3 minutos (*o que decidimos / o que quebrou*).
 
 **Bônus:** produção tem `selfHeal: false` (só alerta). Troque para `true` em `gitops/apps/agente-producao.yaml`,
 faça o merge e repita o drift. **Qual política vocês escolhem para produção, e por quê?**
