@@ -26,13 +26,13 @@ acima de 2% e o workflow termina em **rollback** (vermelho de propósito).
 ## 3. Manualmente, para entender cada passo
 
 ```bash
-V=$(classificador/deploy/publicar.sh | tail -1)        # nova versão, ainda sem tráfego
+V=$(MODELO_VERSAO="$(git rev-parse --short HEAD)-canary" classificador/deploy/publicar.sh | tail -1)   # nova versão, ainda sem tráfego
 URL=$(classificador/deploy/trafego.sh 1 "$V" 0.2)      # alias: 80% na versão 1, 20% na nova
 python classificador/deploy/canary_check.py "$URL" --requisicoes 300
 classificador/deploy/trafego.sh "$V"                   # promover   (ou "1" para voltar)
 ```
 
-A resposta traz `"versao"`: é assim que se vê qual versão atendeu.
+A resposta traz `"versao"`: é assim que se vê qual versão atendeu. Por isso a candidata recebe um `MODELO_VERSAO` próprio (o workflow usa `<sha>-<run>`): sem ele, o `publicar.sh` usa o SHA do commit, que pode ser o mesmo da versão estável, e aí o `canary_check.py` vê uma só versão ("Só uma versão respondeu").
 
 ## Perguntas
 
